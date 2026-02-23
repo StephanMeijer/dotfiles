@@ -9,8 +9,17 @@ echo "==> Installing/updating Nix packages via home-manager..."
 # Step 1: Install Determinate Nix if not present
 if ! command -v nix &>/dev/null; then
   echo "==> Nix not found, installing Determinate Nix..."
+{{ if eq .chezmoi.os "darwin" -}}
+  # macOS: use the native .pkg installer (handles macOS quirks better)
+  PKG_URL="$(curl -sSf -L https://install.determinate.systems/nix-installer-pkg/stable | jq -r '.url_prefix')/Universal"
+  TMPDIR="$(mktemp -d)"
+  curl -sSf -L "${PKG_URL}" -o "${TMPDIR}/nix-installer.pkg"
+  sudo installer -pkg "${TMPDIR}/nix-installer.pkg" -target /
+  rm -rf "${TMPDIR}"
+{{ else -}}
   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
     | sh -s -- install --no-confirm
+{{ end -}}
 fi
 
 # Step 2: Ensure Nix is on PATH for this session
