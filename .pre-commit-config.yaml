@@ -21,6 +21,13 @@ repos:
 
   - repo: local
     hooks:
+      - id: chezmoi-apply
+        name: chezmoi apply
+        entry: chezmoi apply
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
       - id: chezmoi-verify
         name: chezmoi verify
         entry: chezmoi verify
