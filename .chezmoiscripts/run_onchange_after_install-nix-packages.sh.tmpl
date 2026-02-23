@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+# Trigger onchange when nix-config changes:
+# nix-config hash: {{ if stat (joinPath .chezmoi.homeDir ".config/home-manager/flake.lock") }}{{ output "sha256sum" (joinPath .chezmoi.homeDir ".config/home-manager/flake.lock") }}{{ else }}first-run{{ end }}
+
+echo "==> Installing/updating Nix packages via home-manager..."
+
+# Step 1: Install Determinate Nix if not present
+if ! command -v nix &>/dev/null; then
+  echo "==> Nix not found, installing Determinate Nix..."
+  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
+    | sh -s -- install --no-confirm
+fi
+
+# Step 2: Ensure Nix is on PATH for this session
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  # shellcheck source=/dev/null
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+
+# Step 3: Run home-manager switch
+if command -v home-manager &>/dev/null; then
+  home-manager switch --flake ~/.config/home-manager
+else
+  echo "==> home-manager not found, bootstrapping via nix run..."
+  nix run home-manager -- switch --flake ~/.config/home-manager
+fi
+
+echo "==> Nix packages installed successfully."
