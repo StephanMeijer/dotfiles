@@ -10,11 +10,13 @@ echo "==> Installing/updating Nix packages via home-manager..."
 if ! command -v nix &>/dev/null; then
   echo "==> Nix not found, installing Determinate Nix..."
 {{ if eq .chezmoi.os "darwin" -}}
-  # macOS: use the native .pkg installer (handles macOS quirks better)
-  PKG_URL="$(curl -sSf -L https://install.determinate.systems/nix-installer-pkg/stable | jq -r '.url_prefix')/Universal"
+  # macOS: download the binary directly (the curl|sh and .pkg installers
+  # have reliability issues on macOS -- Gatekeeper, notarization, etc.)
   TMPDIR="$(mktemp -d)"
-  curl -sSf -L "${PKG_URL}" -o "${TMPDIR}/nix-installer.pkg"
-  sudo installer -pkg "${TMPDIR}/nix-installer.pkg" -target /
+  curl -sSf -L "https://install.determinate.systems/nix/nix-installer-aarch64-darwin" \
+    -o "${TMPDIR}/nix-installer"
+  chmod +x "${TMPDIR}/nix-installer"
+  "${TMPDIR}/nix-installer" install --no-confirm
   rm -rf "${TMPDIR}"
 {{ else -}}
   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
