@@ -1,0 +1,8 @@
+{{- $name := promptStringOnce . "name" "Full name" -}}
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $gitLfsConcurrentTransfers := promptIntOnce . "git_lfs_concurrent_transfers" "Git LFS concurrent transfers (default 50)" -}}
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    git_lfs_concurrent_transfers = {{ $gitLfsConcurrentTransfers }}
