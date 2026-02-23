@@ -1,0 +1,59 @@
+# Managed by chezmoi
+data.location={{ .chezmoi.homeDir }}/.task
+news.version=3.3.0
+
+# ============================================
+# URGENCY CONFIGURATION
+# ============================================
+
+# --- Reduce default age coefficient (old tasks shouldn't dominate) ---
+urgency.age.coefficient=1.0
+
+# --- TAG COEFFICIENTS ---
+
+# Money/Invoice (highest priority - cash flow)
+urgency.user.tag.invoice.coefficient=6.0
+urgency.user.tag.funding.coefficient=3.0
+urgency.user.tag.finance.coefficient=2.0
+
+# Hard deadlines (events with fixed dates)
+urgency.user.tag.nlnet.coefficient=4.0
+urgency.user.tag.fosdem.coefficient=4.0
+urgency.user.tag.deadline.coefficient=3.0
+
+# Work tasks (boost)
+urgency.user.tag.work.coefficient=2.0
+urgency.user.tag.api.coefficient=1.5
+urgency.user.tag.kubernetes.coefficient=1.5
+urgency.user.tag.presentation.coefficient=2.0
+
+# Personal/Low priority (reduce)
+urgency.user.tag.chore.coefficient=-5.0
+urgency.user.tag.home.coefficient=-3.0
+urgency.user.tag.research.coefficient=-1.0
+urgency.user.tag.bunq.coefficient=-2.0
+
+# --- PROJECT COEFFICIENTS ---
+
+# Admin (invoices, business tasks)
+urgency.user.project.admin.coefficient=3.0
+
+# Active client work
+urgency.user.project.lasuite.coefficient=2.0
+
+# Main project (neutral - urgency comes from tags/due dates)
+urgency.user.project.docspec.coefficient=1.0
+
+# ============================================
+# REPORT CUSTOMIZATION
+# ============================================
+report.next.columns=id,start.age,entry.age,depends,priority,project,tags,recur,scheduled.countdown,due.relative,until.remaining,description.count,urgency
+report.list.filter=status:pending -BLOCKED
+
+# ============================================
+# SYNC CONFIGURATION
+# ============================================
+sync.server.url={{ .task_sync_url }}
+sync.server.client_id={{ .task_sync_client_id }}
+sync.encryption_secret={{ .task_sync_encryption_secret }}
+recurrence=on

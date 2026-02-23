@@ -1,8 +1,14 @@
 {{- $name := promptStringOnce . "name" "Full name" -}}
 {{- $email := promptStringOnce . "email" "Email address" -}}
 {{- $gitLfsConcurrentTransfers := promptIntOnce . "git_lfs_concurrent_transfers" "Git LFS concurrent transfers (default 50)" -}}
+{{- $taskSyncUrl := promptStringOnce . "task_sync_url" "Taskwarrior sync server URL" -}}
+{{- $taskSyncClientId := promptStringOnce . "task_sync_client_id" "Taskwarrior sync client ID (UUID)" -}}
+{{- $taskSyncEncryptionSecret := promptStringOnce . "task_sync_encryption_secret" "Taskwarrior sync encryption secret" -}}
 
 [data]
     name = {{ $name | quote }}
     email = {{ $email | quote }}
     git_lfs_concurrent_transfers = {{ $gitLfsConcurrentTransfers }}
+    task_sync_url = {{ $taskSyncUrl | quote }}
+    task_sync_client_id = {{ $taskSyncClientId | quote }}
+    task_sync_encryption_secret = {{ $taskSyncEncryptionSecret | quote }}
