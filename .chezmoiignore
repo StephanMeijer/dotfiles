@@ -1,0 +1,8 @@
+# Repo-only files — not deployed to home directory
+justfile
+.pre-commit-config.yaml
+.editorconfig
+.gitignore
+.chezmoiignore
+README.md
+LICENSE
