@@ -1,0 +1,9 @@
+#!/bin/bash
+# Taskwarrior on-exit hook: auto-sync after every command
+# Pass through all input (required by hook protocol)
+cat
+
+# Prevent recursion: env var is set when this hook triggers sync
+if [ -z "$TASK_HOOK_SYNCING" ]; then
+    TASK_HOOK_SYNCING=1 task sync >/dev/null 2>&1
+fi
